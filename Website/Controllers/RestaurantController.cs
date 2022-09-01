@@ -2,37 +2,32 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Website.Models;
 using Lib.Models;
+using Lib.Services;
 
 namespace Website.Controllers;
 
 public class RestaurantController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IOpenRestaurantService _openRestaurantService;
 
-    public RestaurantController(ILogger<HomeController> logger)
+    public RestaurantController(ILogger<HomeController> logger, IOpenRestaurantService openRestaurantService)
     {
         _logger = logger;
+        _openRestaurantService = openRestaurantService;
     }
 
     public IActionResult Open(DateTime date, DateTime time)
     {
-        Console.WriteLine("hello!");
+        var selectedDate = DateOnly.FromDateTime(date);
+        var selectedTime = TimeOnly.FromDateTime(time);
+
+        var openRestaurants = _openRestaurantService.GetOpenRestaurants(selectedDate.DayOfWeek, selectedTime);
 
         var model = new OpenViewModel {
             Date = DateOnly.FromDateTime(date),
             Time = TimeOnly.FromDateTime(time),
-            OpenRestaurants = new List<Restaurant> {
-                new Restaurant{ 
-                    Name = "Bob's",
-                    Availabilities = new List<Availability> {
-                        new Availability {
-                            Day = DayOfWeek.Monday,
-                            Open = TimeOnly.Parse("09:00"),
-                            Close = TimeOnly.Parse("20:00")
-                        }
-                    }
-                }
-            }
+            OpenRestaurants = openRestaurants
         };
 
         return View(model);

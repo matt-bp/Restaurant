@@ -6,5 +6,5 @@ public class OpenViewModel
 {
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }
-    public ICollection<Restaurant> OpenRestaurants { get; set; }
+    public IEnumerable<Restaurant> OpenRestaurants { get; set; }
 }
