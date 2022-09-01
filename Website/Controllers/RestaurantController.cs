@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Website.Models;
+using Lib.Models;
 
 namespace Website.Controllers;
 
@@ -23,8 +24,8 @@ public class RestaurantController : Controller
             OpenRestaurants = new List<Restaurant> {
                 new Restaurant{ 
                     Name = "Bob's",
-                    Availabilities = new List<Restaurant.Availability> {
-                        new Restaurant.Availability {
+                    Availabilities = new List<Availability> {
+                        new Availability {
                             Day = DayOfWeek.Monday,
                             Open = TimeOnly.Parse("09:00"),
                             Close = TimeOnly.Parse("20:00")
