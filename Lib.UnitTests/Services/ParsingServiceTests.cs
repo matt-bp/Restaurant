@@ -96,4 +96,20 @@ public class ParsingServiceTests
 
         Assert.That(result, Is.EquivalentTo(expected));
     }
+
+    [Test]
+    public void MakeAvailabilitiesFromStr_WhenBothTimesInAfternoon_ReturnsCorrectTimes()
+    {
+        const string testString = "Mon 1 pm - 9 pm";
+        var expected = new Availability
+        {
+            Day = DayOfWeek.Monday,
+            Open = TimeOnly.Parse("13:00"),
+            Close = TimeOnly.Parse("21:00")
+        };
+        var result = ParsingService.MakeAvailabilitiesFromStr(testString);
+
+        var first = result.First();
+        first.Should().BeEquivalentTo(expected);
+    }
 }

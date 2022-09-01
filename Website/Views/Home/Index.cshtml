@@ -7,16 +7,15 @@
     <section>
         <h2>Find an open restaurant</h2>
         <form asp-controller="Restaurant" asp-action="Open">
-            <label>
-                Enter the day to find restaurants:
-                <input type="date" name="date">
-            </label>
-            <label>
-                Enter the desired time:
-                <input type="time" name="time">
-            </label>
-            <p><button>Submit</button></p>
+            <div class="form-group">
+                <label for="desired-date">Date</label>
+                <input type="date" name="date" class="form-control" id="desired-date"/>
+            </div>
+            <div class="form-group">
+                <label for="desired-time">Time</label>
+                <input type="time" name="time" class="form-control" id="desired-time"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
     </section>
 </div>
