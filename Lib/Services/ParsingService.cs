@@ -31,24 +31,15 @@ public class ParsingService
             open = TimeOnly.Parse(startTime);
             
             var startTimeInMorning = split[currentSubString + 1] == "am";
-            //if (!startTimeInMorning)
-            //{
-            //    open = open.Value.AddHours(12);
-            //}
-
             open = HandleTwelveHourClock(open.Value, startTimeInMorning);
-            
-            // var dash = split[currentSubString + 2] == "-";
 
             var endTime = AddColonIfSingleDigit(split[currentSubString + 3]);
             if (Regex.IsMatch(endTime, digitPattern))
             {
                 close = TimeOnly.Parse(endTime);
+
                 var endTimeInMorning = split[currentSubString + 4] == "am";
-                if (!endTimeInMorning)
-                {
-                    close = close.Value.AddHours(12);
-                }
+                close = HandleTwelveHourClock(close.Value, endTimeInMorning);
             }
         }
 

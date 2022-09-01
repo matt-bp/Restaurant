@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var jsonStr = File.ReadAllText("./rest_hours.json");
@@ -14,7 +13,6 @@ builder.Services.AddSingleton<IOpenRestaurantService>(x => new OpenRestaurantSer
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
