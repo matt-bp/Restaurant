@@ -112,4 +112,36 @@ public class ParsingServiceTests
         var first = result.First();
         first.Should().BeEquivalentTo(expected);
     }
+
+    [Test]
+    public void MakeAvailabilitiesFromStr_WhenParsingNoon_ReturnsTheCorrectTime()
+    {
+        const string testString = "Mon 12 pm - 10 pm";
+        var expected = new Availability
+        {
+            Day = DayOfWeek.Monday,
+            Open = TimeOnly.Parse("12:00"),
+            Close = TimeOnly.Parse("22:00")
+        };
+        var result = ParsingService.MakeAvailabilitiesFromStr(testString);
+
+        var first = result.First();
+        first.Should().BeEquivalentTo(expected);
+    }
+
+    [Test]
+    public void MakeAvailabilitiesFromStr_WhenParsingMidnight_ReturnsTheCorrectTime()
+    {
+        const string testString = "Mon 12 am - 10 am";
+        var expected = new Availability
+        {
+            Day = DayOfWeek.Monday,
+            Open = TimeOnly.Parse("00:00"),
+            Close = TimeOnly.Parse("10:00")
+        };
+        var result = ParsingService.MakeAvailabilitiesFromStr(testString);
+
+        var first = result.First();
+        first.Should().BeEquivalentTo(expected);
+    }
 }

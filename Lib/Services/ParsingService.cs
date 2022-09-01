@@ -15,9 +15,7 @@ public class ParsingService
     }
 
     public static IEnumerable<Availability> MakeAvailabilitiesFromStr(string strAvailability)
-    {
-        // Mon 11:30 am - 9 pm
-        
+    {       
         var split = strAvailability.Split(' ').Where(s => s != " ").ToArray();
         
         TimeOnly? open = null;
@@ -33,10 +31,12 @@ public class ParsingService
             open = TimeOnly.Parse(startTime);
             
             var startTimeInMorning = split[currentSubString + 1] == "am";
-            if (!startTimeInMorning)
-            {
-                open = open.Value.AddHours(12);
-            }
+            //if (!startTimeInMorning)
+            //{
+            //    open = open.Value.AddHours(12);
+            //}
+
+            open = HandleTwelveHourClock(open.Value, startTimeInMorning);
             
             // var dash = split[currentSubString + 2] == "-";
 
@@ -65,6 +65,26 @@ public class ParsingService
         });
 
         return availabilities;
+    }
+
+    private static TimeOnly HandleTwelveHourClock(TimeOnly time, bool isMorning)
+    {
+        if (isMorning && time.Hour != 12)
+        {
+            return time;
+        }
+        else if (!isMorning && time.Hour != 12)
+        {
+            return time.AddHours(12);
+        }
+        else if (isMorning && time.Hour == 12)
+        {
+            return time.AddHours(-12);
+        }
+        else
+        {
+            return time;
+        }
     }
 
     private static string AddColonIfSingleDigit(string time)

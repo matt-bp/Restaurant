@@ -2,19 +2,30 @@
 @{
     ViewData["Title"] = "Open Restaurants";
 }
+
 <h1>@ViewData["Title"]</h1>
 
-<p>Here are restaurants open on @Model.Date.DayOfWeek @Model.Date at @Model.Time</p>
-
-@foreach(var restaurant in Model.OpenRestaurants)
+@if (Model.OpenRestaurants.Any())
 {
-    <div>
-        <p>@restaurant.Name</p>
-        @foreach(var available in restaurant.Availabilities.Where(a => a.Day == Model.Date.DayOfWeek))
-        {
-            <div>
-                <p>@available.Day from @available.Open to @available.Close</p>
-            </div>
-        }
+    <p>Here are restaurants open on @Model.Date.DayOfWeek, @Model.Date at @Model.Time</p>
+
+   <div class="card">
+        <ul class="list-group list-group-flush">
+            @foreach(var openRestaurant in Model.OpenRestaurants)
+            {
+                var avilability = openRestaurant.Availabilities.First(a => a.Day == Model.Date.DayOfWeek);
+
+                <li class="list-group-item mw-50">
+                    <div class="d-flex flex-row justify-content-between">
+                        <b class="col-sm-8">@openRestaurant.Name</b>
+                        <small class="col-sm-4 text-sm-end">@avilability.Open - @avilability.Close</small>
+                    </div>
+                </li>
+            }
+        </ul>
     </div>
+}
+else
+{
+    <p>There are no open restaurants on @Model.Date.DayOfWeek, @Model.Date at @Model.Time</p>
 }
