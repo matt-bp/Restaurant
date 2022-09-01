@@ -19,47 +19,28 @@ public class ParsingService
         // Mon 11:30 am - 9 pm
         
         var split = strAvailability.Split(' ').Where(s => s != " ").ToArray();
-
-        var days = new List<DayOfWeek>();
+        
         TimeOnly? open = null;
         TimeOnly? close = null;
 
         var digitPattern = @"\d";
-        var currentSubString = 0;
-
-        foreach (var str in split)
-        {
-            if (Regex.IsMatch(str, digitPattern))
-            {
-                break;
-            }
-            
-            switch (str)
-            {
-                case "Mon":
-                    days.Add(DayOfWeek.Monday);
-                    break;
-            }
-
-            currentSubString += 1;
-        }
-
-
-        var startTime = split[currentSubString];
-
+        
+        var days = ParseDaysOfWeek(split, out var currentSubString);
+        
+        var startTime = AddColonIfSingleDigit(split[currentSubString]);
         if (Regex.IsMatch(startTime, digitPattern))
         {
-            var startTimeInMorning = split[currentSubString + 1] == "am";
-
             open = TimeOnly.Parse(startTime);
             
-            var dash = split[currentSubString + 2] == "-";
-
-            var endTime = split[currentSubString + 3];
-            if (!endTime.Contains(':'))
+            var startTimeInMorning = split[currentSubString + 1] == "am";
+            if (!startTimeInMorning)
             {
-                endTime += ":00";
+                open = open.Value.AddHours(12);
             }
+            
+            // var dash = split[currentSubString + 2] == "-";
+
+            var endTime = AddColonIfSingleDigit(split[currentSubString + 3]);
             if (Regex.IsMatch(endTime, digitPattern))
             {
                 close = TimeOnly.Parse(endTime);
@@ -84,5 +65,75 @@ public class ParsingService
         });
 
         return availabilities;
+    }
+
+    private static string AddColonIfSingleDigit(string time)
+    {
+        return time.Contains(':') ? time : time + ":00";
+    }
+
+    private static IEnumerable<DayOfWeek> ParseDaysOfWeek(string[] split, out int currentIndex)
+    {
+        currentIndex = 0;
+        
+        List<DayOfWeek> days = new List<DayOfWeek>();
+        
+        var digitPattern = @"\d";
+        
+        while (!Regex.IsMatch(split[currentIndex], digitPattern))
+        {
+            var current = split[currentIndex];
+            if (current.Contains('-'))
+            {
+                var splitRange = current.Split("-");
+                var start = GetDayFromString(splitRange[0]);
+                var end = GetDayFromString(splitRange[1]);
+                days.AddRange(CreateDayRange(start, end));
+            }
+            else
+            {
+                days.Add(GetDayFromString(current));
+            }
+            
+            currentIndex += 1;
+        }
+        
+        return days;
+    }
+
+    private static string SanatizeDay(string day)
+    {
+        return day.Replace(",", "");
+    }
+
+    private static DayOfWeek GetDayFromString(string day) => SanatizeDay(day) switch
+    {
+        "Mon" => DayOfWeek.Monday,
+        "Tue" => DayOfWeek.Tuesday,
+        "Wed" => DayOfWeek.Wednesday,
+        "Thu" => DayOfWeek.Thursday,
+        "Fri" => DayOfWeek.Friday,
+        "Sat" => DayOfWeek.Saturday,
+        "Sun" => DayOfWeek.Sunday,
+        _ => DayOfWeek.Sunday
+    };
+    
+    private static IEnumerable<DayOfWeek> CreateDayRange(DayOfWeek start, DayOfWeek end)
+    {
+        var days = new List<DayOfWeek>();
+
+        var currentInt = (int)start;
+        var endInt = (int)end;
+        while (currentInt != endInt)
+        {
+            var test = (DayOfWeek)currentInt;
+            days.Add(test);
+
+            currentInt = (currentInt + 1) % ((int)DayOfWeek.Saturday + 1);
+        }
+        
+        days.Add(end);
+
+        return days;
     }
 }

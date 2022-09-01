@@ -4,15 +4,17 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to show restaurants. @Model.Date and @Model.Time</p>
+<p>Here are restaurants open on @Model.Date.DayOfWeek @Model.Date at @Model.Time</p>
 
 @foreach(var restaurant in Model.OpenRestaurants)
 {
     <div>
         <p>@restaurant.Name</p>
-        @foreach(var available in restaurant.Availabilities)
+        @foreach(var available in restaurant.Availabilities.Where(a => a.Day == Model.Date.DayOfWeek))
         {
-            <p>@available.Day from @available.Open to @available.Close</p>
+            <div>
+                <p>@available.Day from @available.Open to @available.Close</p>
+            </div>
         }
     </div>
 }

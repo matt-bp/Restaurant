@@ -21,4 +21,79 @@ public class ParsingServiceTests
         var first = result.First();
         first.Should().BeEquivalentTo(expected);
     }
+
+    [Test]
+    public void MakeAvailabilitiesFromStr_WhenMonToThu_ReturnsDaysInBetween()
+    {
+        const string testString = "Mon-Thu 11:30 am - 9 pm";
+        var expected = new List<DayOfWeek>
+        {
+            DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday
+        };
+
+        var result = ParsingService.MakeAvailabilitiesFromStr(testString)
+            .Select(a => a.Day);
+        
+        Assert.That(result, Is.EquivalentTo(expected));
+    }
+
+    [Test]
+    public void MakeAvailabilitiesFromStr_WhenMonToSun_ReturnsDaysInBetween()
+    {
+        const string testString = "Mon-Sun 11:30 am - 9 pm";
+        var expected = new List<DayOfWeek>
+        {
+            DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday
+        };
+
+        var result = ParsingService.MakeAvailabilitiesFromStr(testString)
+            .Select(a => a.Day);
+        
+        Assert.That(result, Is.EquivalentTo(expected));
+    }
+
+    [Test]
+    public void MakeAvailabilitiesFromStr_WhenCommaSeparatedBeforeRange_ReturnsDisjointDays()
+    {
+        const string testString = "Mon, Wed-Fri 11:30 am - 9 pm";
+        var expected = new List<DayOfWeek>
+        {
+            DayOfWeek.Monday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday
+        };
+
+        var result = ParsingService.MakeAvailabilitiesFromStr(testString)
+            .Select(a => a.Day);
+
+        Assert.That(result, Is.EquivalentTo(expected));
+    }
+    
+    [Test]
+    public void MakeAvailabilitiesFromStr_WhenCommaSeparatedAfterRange_ReturnsDisjointDays()
+    {
+        const string testString = "Mon-Wed, Sun 11:30 am - 9 pm";
+        var expected = new List<DayOfWeek>
+        {
+            DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Sunday
+        };
+
+        var result = ParsingService.MakeAvailabilitiesFromStr(testString)
+            .Select(a => a.Day);
+
+        Assert.That(result, Is.EquivalentTo(expected));
+    }
+    
+    [Test]
+    public void MakeAvailabilitiesFromStr_WhenTwoRanges_ReturnsCorrectDays()
+    {
+        const string testString = "Mon-Wed, Fri-Sun 11:30 am - 9 pm";
+        var expected = new List<DayOfWeek>
+        {
+            DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday
+        };
+
+        var result = ParsingService.MakeAvailabilitiesFromStr(testString)
+            .Select(a => a.Day);
+
+        Assert.That(result, Is.EquivalentTo(expected));
+    }
 }
