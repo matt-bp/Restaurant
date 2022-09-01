@@ -5,19 +5,17 @@
 <div>
     <h1 class="display-4 text-center">Welcome</h1>
     <section class="col-md-6">
-        <div>
-            <h2>Find an open restaurant</h2>
-            <form asp-controller="Restaurant" asp-action="Open">
-                <div class="form-group">
-                    <label for="desired-date">Date</label>
-                    <input required type="date" name="date" class="form-control mw-50" id="desired-date"/>
-                </div>
-                <div class="form-group">
-                    <label for="desired-time">Time</label>
-                    <input required type="time" name="time" class="form-control" id="desired-time"/>
-                </div>
-                <button type="submit" class="btn btn-primary mt-2">Submit</button>
-            </form>
-        </div>
+        <h2>Find an open restaurant</h2>
+        <form asp-controller="Restaurant" asp-action="Open">
+            <div class="form-group">
+                <label for="desired-date">Date</label>
+                <input required type="date" name="date" class="form-control mw-50" id="desired-date"/>
+            </div>
+            <div class="form-group">
+                <label for="desired-time">Time</label>
+                <input required type="time" name="time" class="form-control" id="desired-time"/>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Submit</button>
+        </form>
     </section>
 </div>

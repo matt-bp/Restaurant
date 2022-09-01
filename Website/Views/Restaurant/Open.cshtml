@@ -7,7 +7,7 @@
 
 @if (Model.OpenRestaurants.Any())
 {
-    <p>Here are restaurants open on @Model.Date.DayOfWeek, @Model.Date at @Model.Time</p>
+    <p>Here are restaurants open on @Model.Date.DayOfWeek, @Model.Date at @Model.Time.</p>
 
    <div class="card">
         <ul class="list-group list-group-flush">
@@ -27,5 +27,5 @@
 }
 else
 {
-    <p>There are no open restaurants on @Model.Date.DayOfWeek, @Model.Date at @Model.Time</p>
+    <p>There are no open restaurants on @Model.Date.DayOfWeek, @Model.Date at @Model.Time.</p>
 }

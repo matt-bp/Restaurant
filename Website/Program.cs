@@ -1,6 +1,5 @@
 using Lib.Models;
 using Lib.Services;
-using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +10,7 @@ builder.Services.AddControllersWithViews();
 var jsonStr = File.ReadAllText("./rest_hours.json");
 var intermediate = JsonConvert.DeserializeObject<IntermediateJson[]>(jsonStr);
 var restaurants = ParsingService.MakeRestaurantsFromIntermediateJson(intermediate);
-builder.Services.AddScoped<IOpenRestaurantService>(x => new OpenRestaurantService(restaurants));
+builder.Services.AddSingleton<IOpenRestaurantService>(x => new OpenRestaurantService(restaurants));
 
 var app = builder.Build();
 
