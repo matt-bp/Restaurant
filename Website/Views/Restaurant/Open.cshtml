@@ -1,0 +1,18 @@
+@model OpenViewModel
+@{
+    ViewData["Title"] = "Open Restaurants";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Use this page to show restaurants. @Model.Date and @Model.Time</p>
+
+@foreach(var restaurant in Model.OpenRestaurants)
+{
+    <div>
+        <p>@restaurant.Name</p>
+        @foreach(var available in restaurant.Availabilities)
+        {
+            <p>@available.Day from @available.Open to @available.Close</p>
+        }
+    </div>
+}

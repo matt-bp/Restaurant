@@ -4,5 +4,19 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <section>
+        <h2>Find an open restaurant</h2>
+        <form asp-controller="Restaurant" asp-action="Open">
+            <label>
+                Enter the day to find restaurants:
+                <input type="date" name="date">
+            </label>
+            <label>
+                Enter the desired time:
+                <input type="time" name="time">
+            </label>
+            <p><button>Submit</button></p>
+        </form>
+
+    </section>
 </div>
